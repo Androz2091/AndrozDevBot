@@ -1,0 +1,22 @@
+{
+  "name": "androzdevbot",
+  "version": "1.0.0",
+  "description": "Official bot for the AndrozDev server",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Androz2091/AndrozDevBot.git"
+  },
+  "author": "Androz2091",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Androz2091/AndrozDevBot/issues"
+  },
+  "homepage": "https://github.com/Androz2091/AndrozDevBot#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}

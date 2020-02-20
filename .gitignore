@@ -1,0 +1,6 @@
+# Node
+package-lock.json
+yarn.lock
+node_modules/
+# Config
+config.js
