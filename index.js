@@ -4,7 +4,6 @@ const client = new Discord.Client({
     fetchAllMembers: true
 });
 const config = require("./config");
-const fetch = require("node-fetch");
 const { Octokit } = require("@octokit/rest");
 const octokit = new Octokit({
     auth: config.githubToken
@@ -117,6 +116,8 @@ client.on("guildMemberAdd", (member) => {
     } else {
         member.roles.add(member.guild.roles.cache.find((role) => role.name === "Members"));
     }
+    const whitelisted = config.whitelistedUsers.includes(member.user.id);
+    if (whitelisted) return;
     member.guild.channels.cache.find((ch) => ch.name === "chat").send(`:flag_gb: Welcome, ${member}! This is the AndrozDev server. This server is dedicated to help for projects created and/or maintained by <@422820341791064085>. **Github**: <https://github.com/Androz2091 >!\n\n:flag_fr: Bienvenue, ${member} ! Ceci est le serveur AndrozDev. Ce serveur est dédié à l'aide pour les packages créés et projets maintenu par <@422820341791064085>.\n**Github**: **https://github.com/Androz2091** !`)
 });
 
