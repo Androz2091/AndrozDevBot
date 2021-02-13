@@ -118,7 +118,7 @@ client.on("guildMemberAdd", (member) => {
     }
     const whitelisted = config.whitelistedUsers.includes(member.user.id);
     if (whitelisted) return;
-    member.guild.channels.cache.find((ch) => ch.name === "chat").send(`:flag_gb: Welcome, ${member}! This is the AndrozDev server. This server is dedicated to help for projects created and/or maintained by <@422820341791064085>. **Github**: <https://github.com/Androz2091 >!\n\n:flag_fr: Bienvenue, ${member} ! Ceci est le serveur AndrozDev. Ce serveur est dédié à l'aide pour les packages créés et projets maintenu par <@422820341791064085>.\n**Github**: **https://github.com/Androz2091** !`)
+    member.guild.channels.cache.find((ch) => ch.name === "chat").send(`:flag_gb: Welcome, ${member}! This is the AndrozDev server. This server is dedicated to help for projects created and/or maintained by <@422820341791064085>. **Github**: <https://github.com/Androz2091>!\n\n:flag_fr: Bienvenue, ${member} ! Ceci est le serveur AndrozDev. Ce serveur est dédié à l'aide pour les packages créés et projets maintenus par <@422820341791064085>.\n**Github**: **https://github.com/Androz2091** !`)
 });
 
 client.login(config.token);
