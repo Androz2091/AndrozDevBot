@@ -108,7 +108,7 @@ client.on('message', async (message) => {
         if(message.content === '!reload') reload();
         else if (message.content === '!!reload') reload(true)
     }   
-  var badWords = ['enculé', 'e n c u l é', 'encule', 'e n c u l e', 'enculer', 'e n c u l e r']
+  var badWords = ['enculé', 'e n c u l é', 'encule', 'e n c u l e', 'enculer', 'e n c u l e r'] //add other bad works :)
   let foundInText = false;
   for (var i in badWords) {
     if (message.content.toLowerCase().includes(badWords[i].toLowerCase())) foundInText = true;
