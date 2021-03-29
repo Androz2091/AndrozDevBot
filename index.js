@@ -107,7 +107,15 @@ client.on('message', async (message) => {
     if(message.guild.ownerID === message.author.id) {
         if(message.content === '!reload') reload();
         else if (message.content === '!!reload') reload(true)
-    }
+    }   
+  var badWords = ['enculé', 'e n c u l é', 'encule', 'e n c u l e', 'enculer', 'e n c u l e r']
+  let foundInText = false;
+  for (var i in badWords) {
+    if (message.content.toLowerCase().includes(badWords[i].toLowerCase())) foundInText = true;
+  }
+  if (foundInText) {
+    message.delete();
+  }
 })
 
 client.on("guildMemberAdd", (member) => {
