@@ -21,7 +21,7 @@ client.on('message', async (message) => {
         if (!clientIDLine || !sourceCodeLine) return wrongFormat('cannot parse message');
         const clientID = clientIDLine.slice('Client ID:'.length, clientIDLine.length).trim();
         if (!clientID) return wrongFormat('client ID not found');
-        const sourceCode = sourceCodeLine.slice('Source code URL:'.length, sourceCodeLine).trim();
+        const sourceCode = sourceCodeLine.slice('Source code URL:'.length, sourceCodeLine.length).trim();
         if (!sourceCode) return wrongFormat('source code not found');
         const user = await client.users.fetch(clientID).catch(() => {});
         if (!user) return wrongFormat('user not found');
