@@ -28,9 +28,9 @@ client.on('message', async (message) => {
         if (!user) return wrongFormat('user not found');
         const embed = new Discord.MessageEmbed()
         .setAuthor(`${user.tag}`, user.displayAvatarURL())
-        .setDescription(`**Name:** ${user.tag}\n**Creation Date**: ${user.createdAt.toString()}\n**Source code**: <${sourceCode}>\n**Invite**: [Click here](https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot)\n**Author**: ${message.author.tag} (${message.author})`)
+        .setDescription(`**ID:** ${user.id}\n**Creation Date**: ${user.createdAt.toString()}\n**Source code**: <${sourceCode}>\n**Invite**: [Click here](https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot)\n**Author**: ${message.author.tag} (${message.author})`)
         .setColor('RED')
-        .setFooter(`ID: ${clientID}`);
+        .setFooter(`Requested by ${message.author.username}`, message.author.displayAvatarURL());
         message.delete();
         message.channel.send(embed);
     }
