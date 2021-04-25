@@ -27,7 +27,7 @@ client.on('message', async (message) => {
         const user = await client.users.fetch(clientID).catch(() => {});
         if (!user) return wrongFormat('user not found');
         const embed = new Discord.MessageEmbed()
-        .setAuthor(`${user.tag}`, user.displayAvatarURL())
+        .setAuthor(user.tag, user.displayAvatarURL())
         .setDescription(`**ID:** ${user.id}\n**Creation Date**: ${user.createdAt.toString()}\n**Source code**: <${sourceCode}>\n**Invite**: [Click here](https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot)\n**Author**: ${message.author.tag} (${message.author})`)
         .setColor('RED')
         .setFooter(`Requested by ${message.author.username}`, message.author.displayAvatarURL());
@@ -39,6 +39,12 @@ client.on('message', async (message) => {
 client.on("guildMemberAdd", (member) => {
     if(member.user.bot){
         member.roles.add(member.guild.roles.cache.find((role => role.name === "Bots")));
+
+        const addBotChannel = client.channels.cache.get(config.addBotChannel);
+        addBotChannel.messages.fetch().then((messages) => {
+            const addMessage = messages.some((m) => m.embeds[0]?.description.startsWith(`**ID:** ${member.user.id}`));
+            if (addMessage) addMessage.delete();
+        });
     } else {
         member.roles.add(member.guild.roles.cache.find((role) => role.name === "Members"));
     }
