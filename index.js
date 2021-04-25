@@ -14,20 +14,20 @@ client.on('message', async (message) => {
 
     if (message.channel.id === config.addBotChannel) {
         const [clientIDLine, sourceCodeLine] = message.content.split('\n');
-        const wrongFormat = () => {
+        const wrongFormat = (reason) => {
             message.delete();
-            message.author.send('Your request is not in the right format. Please retry.');
+            message.author.send('Your request is not in the right format. Please retry. Reason: ' + reason);
         }
-        if (!clientIDLine || !sourceCodeLine) return wrongFormat();
+        if (!clientIDLine || !sourceCodeLine) return wrongFormat('cannot parse message');
         const clientID = clientIDLine.slice('Client ID:'.length, clientIDLine.length).trim();
-        if (!clientID) return wrongFormat();
+        if (!clientID) return wrongFormat('client ID not found');
         const sourceCode = sourceCodeLine.slice('Source code URL:'.length, sourceCodeLine).trim();
-        if (!sourceCode) return wrongFormat();
+        if (!sourceCode) return wrongFormat('source code not found');
         const user = await client.users.fetch(clientID).catch(() => {});
-        if (!user) return wrongFormat();
+        if (!user) return wrongFormat('user not found');
         const embed = new Discord.MessageEmbed()
         .setAuthor(`${message.author.tag} wants to add their bot`, message.author.displayAvatarURL())
-        .setDescription(`**Name:** ${user.tag}\n**Creation Date**: ${user.createdAt.toString()}\n**Invite**: <https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot>`)
+        .setDescription(`**Name:** ${user.tag}\n**Creation Date**: ${user.createdAt.toString()}\n**Source code**: <${sourceCode}>\n**Invite**: <https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot>`)
         .setColor('RED')
         .setFooter(`ID: ${clientID}`);
         message.delete();
