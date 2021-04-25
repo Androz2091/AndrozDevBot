@@ -1,4 +1,5 @@
 module.exports = {
     token: "",
-    whitelistedUsers: []
+    whitelistedUsers: [],
+    addBotChannel: "835878723726999573"
 };

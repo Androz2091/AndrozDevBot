@@ -11,6 +11,28 @@ client.on("ready", () => {
 
 client.on('message', async (message) => {
     if(message.channel.type === 'dm') return;
+
+    if (message.channel.id === config.addBotChannel) {
+        const [clientIDLine, sourceCodeLine] = message.content.split('\n');
+        const wrongFormat = () => {
+            message.delete();
+            message.author.send('Your request is not in the right format. Please retry.');
+        }
+        if (!clientIDLine || !sourceCodeLine) return wrongFormat();
+        const clientID = clientIDLine.slice('Client ID:'.length, clientIDLine.length).trim();
+        if (!clientID) return wrongFormat();
+        const sourceCode = sourceCodeLine.slice('Source code URL:'.length, sourceCodeLine).trim();
+        if (!sourceCode) return wrongFormat();
+        const user = await client.users.fetch(clientID).catch(() => {});
+        if (!user) return wrongFormat();
+        const embed = new Discord.MessageEmbed()
+        .setAuthor(`${message.author.tag} wants to add their bot`, message.author.displayAvatarURL())
+        .setDescription(`**Name:** ${user.tag}\n**Creation Date**: ${user.createdAt.toString()}\n**Invite**: <https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot>`)
+        .setColor('RED')
+        .setFooter(`ID: ${clientID}`);
+        message.delete();
+        message.channel.send(embed);
+    }
 })
 
 client.on("guildMemberAdd", (member) => {
