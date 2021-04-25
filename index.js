@@ -10,7 +10,8 @@ client.on("ready", () => {
 });
 
 client.on('message', async (message) => {
-    if(message.channel.type === 'dm') return;
+    if (message.channel.type === 'dm') return;
+    if (message.author.bot) return;
 
     if (message.channel.id === config.addBotChannel) {
         const [clientIDLine, sourceCodeLine] = message.content.split('\n');
