@@ -28,7 +28,7 @@ client.on('message', async (message) => {
         if (!user) return wrongFormat('user not found');
         const embed = new Discord.MessageEmbed()
         .setAuthor(`${message.author.tag} wants to add their bot`, message.author.displayAvatarURL())
-        .setDescription(`**Name:** ${user.tag}\n**Creation Date**: ${user.createdAt.toString()}\n**Source code**: <${sourceCode}>\n**Invite**: [https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot](Click here)`)
+        .setDescription(`**Name:** ${user.tag}\n**Creation Date**: ${user.createdAt.toString()}\n**Source code**: <${sourceCode}>\n**Invite**: [Click here](https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot)`)
         .setColor('RED')
         .setFooter(`ID: ${clientID}`);
         message.delete();
