@@ -39,14 +39,18 @@ client.on('messageCreate', async (message) => {
     ) {
         message.channel.send({
             content: `your message seems to be related to <#${config.scratchForDiscordChannelID}>. In this case, please use this channel instead.`,
-            messageReference: message.id,
+            reply: {
+                messageReference: message.id,
+            },
         });
     } else if (
         /help|please/.test(message.content) && config.chatChannelIDs.includes(message.channel.id)
     ) {
         message.channel.send({
             content: `your message seems to be a request for help. In this case, please use <#${config.generalSupportChannelID}> instead.`,
-            messageReference: message.id,
+            reply: {
+                messageReference: message.id,
+            },
         });
     }
 });
