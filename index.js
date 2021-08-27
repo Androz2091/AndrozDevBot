@@ -38,7 +38,7 @@ client.on('message', async (message) => {
     else if (
         /s4d|scratch/.test(message.content) && message.channel.id !== config.scratchForDiscordChannelID
     ) {
-        message.channel.send(`your message may be about <#${config.scratchForDiscordChannelID}>. In this case, please use this channel instead.`, {
+        message.channel.send(`your message seems to be related to <#${config.scratchForDiscordChannelID}>. In this case, please use this channel instead.`, {
             referenceMessage: message
         });
     }
