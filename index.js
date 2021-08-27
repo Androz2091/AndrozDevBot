@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 const client = new Discord.Client({
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-    intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES],
+    intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MEMBERS],
 });
 const config = require('./config');
 
@@ -33,7 +33,7 @@ client.on('message', async (message) => {
             .setColor('RED')
             .setFooter(`Requested by ${message.author.username}`, message.author.displayAvatarURL());
         message.delete();
-        message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
     } else if (
         /s4d|scratch/.test(message.content) && message.channel.id !== config.scratchForDiscordChannelID
     ) {
