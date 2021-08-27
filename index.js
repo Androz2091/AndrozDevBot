@@ -34,7 +34,24 @@ client.on('message', async (message) => {
         message.delete();
         message.channel.send(embed);
     }
-})
+
+    else if (
+        /s4d|scratch/.test(message.content) && message.channel.id !== config.scratchForDiscordChannelID
+    ) {
+        message.channel.send(`your message may be about <#${config.scratchForDiscordChannelID}>. In this case, please use this channel instead.`, {
+            referenceMessage: message
+        });
+    }
+
+    else if (
+        /help|please/.test(message.content) && config.chatChannelIDs.includes(message.channel.id)
+    ) {
+        message.channel.send(`your message seems to be a request for help. In this case, please use <#${config.generalSupportChannelID}> instead.`, {
+            referenceMessage: message
+        });
+    }
+
+});
 
 client.on("guildMemberAdd", (member) => {
     if(member.user.bot){
