@@ -1,12 +1,13 @@
-const Discord = require("discord.js");
-const client = new Discord.Client({
-    partials: [ "MESSAGE", "CHANNEL", "REACTION" ],
-    fetchAllMembers: true
-});
-const config = require("./config");
+const Discord = require('discord.js');
 
-client.on("ready", () => {
-    console.log("Ready. Logged as "+client.user.tag);
+const client = new Discord.Client({
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+    intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES],
+});
+const config = require('./config');
+
+client.on('ready', () => {
+    console.log(`Ready. Logged as ${client.user.tag}`);
 });
 
 client.on('message', async (message) => {
@@ -17,8 +18,8 @@ client.on('message', async (message) => {
         const [clientIDLine, sourceCodeLine] = message.content.split('\n');
         const wrongFormat = (reason) => {
             message.delete();
-            message.author.send('Your request is not in the right format. Please retry. Reason: ' + reason);
-        }
+            message.author.send(`Your request is not in the right format. Please retry. Reason: ${reason}`);
+        };
         if (!clientIDLine || !sourceCodeLine) return wrongFormat('cannot parse message');
         const clientID = clientIDLine.slice('Client ID:'.length, clientIDLine.length).trim();
         if (!clientID || !(/^([0-9]{1,32})$/.test(clientID))) return wrongFormat('client ID not found');
@@ -27,35 +28,30 @@ client.on('message', async (message) => {
         const user = await client.users.fetch(clientID).catch(() => {});
         if (!user) return wrongFormat('user not found');
         const embed = new Discord.MessageEmbed()
-        .setAuthor(user.tag, user.displayAvatarURL())
-        .setDescription(`**ID:** ${user.id}\n**Creation Date**: ${user.createdAt.toString()}\n**Source code**: <${sourceCode}>\n**Invite**: [Click here](https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=0&scope=bot)\n**Author**: ${message.author.tag} (${message.author})`)
-        .setColor('RED')
-        .setFooter(`Requested by ${message.author.username}`, message.author.displayAvatarURL());
+            .setAuthor(user.tag, user.displayAvatarURL())
+            .setDescription(`**ID:** ${user.id}\n**Creation Date**: ${user.createdAt.toString()}\n**Source code**: <${sourceCode}>\n**Invite**: [Click here](https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=0&scope=bot)\n**Author**: ${message.author.tag} (${message.author})`)
+            .setColor('RED')
+            .setFooter(`Requested by ${message.author.username}`, message.author.displayAvatarURL());
         message.delete();
         message.channel.send(embed);
-    }
-
-    else if (
+    } else if (
         /s4d|scratch/.test(message.content) && message.channel.id !== config.scratchForDiscordChannelID
     ) {
         message.channel.send(`your message seems to be related to <#${config.scratchForDiscordChannelID}>. In this case, please use this channel instead.`, {
-            referenceMessage: message
+            referenceMessage: message,
         });
-    }
-
-    else if (
+    } else if (
         /help|please/.test(message.content) && config.chatChannelIDs.includes(message.channel.id)
     ) {
         message.channel.send(`your message seems to be a request for help. In this case, please use <#${config.generalSupportChannelID}> instead.`, {
-            referenceMessage: message
+            referenceMessage: message,
         });
     }
-
 });
 
-client.on("guildMemberAdd", (member) => {
-    if(member.user.bot){
-        member.roles.add(member.guild.roles.cache.find((role => role.name === "Bots")));
+client.on('guildMemberAdd', (member) => {
+    if (member.user.bot) {
+        member.roles.add(member.guild.roles.cache.find(((role) => role.name === 'Bots')));
 
         const addBotChannel = client.channels.cache.get(config.addBotChannel);
         addBotChannel.messages.fetch().then((messages) => {
@@ -63,11 +59,11 @@ client.on("guildMemberAdd", (member) => {
             if (addMessage) addMessage.delete();
         });
     } else {
-        member.roles.add(member.guild.roles.cache.find((role) => role.name === "Members"));
+        member.roles.add(member.guild.roles.cache.find((role) => role.name === 'Members'));
     }
     const whitelisted = config.whitelistedUsers.includes(member.user.id);
     if (whitelisted) return;
-    member.guild.channels.cache.find((ch) => ch.name === "welcome").send(`:flag_gb: Welcome, ${member}! This is the AndrozDev server. This server is dedicated to help for projects created and/or maintained by <@422820341791064085>. **Github**: <https://github.com/Androz2091>!\n\n:flag_fr: Bienvenue, ${member} ! Ceci est le serveur AndrozDev. Ce serveur est dédié à l'aide pour les packages créés et projets maintenus par <@422820341791064085>.\n**Github**: **https://github.com/Androz2091** !`)
+    member.guild.channels.cache.find((ch) => ch.name === 'welcome').send(`:flag_gb: Welcome, ${member}! This is the AndrozDev server. This server is dedicated to help for projects created and/or maintained by <@422820341791064085>. **Github**: <https://github.com/Androz2091>!\n\n:flag_fr: Bienvenue, ${member} ! Ceci est le serveur AndrozDev. Ce serveur est dédié à l'aide pour les packages créés et projets maintenus par <@422820341791064085>.\n**Github**: **https://github.com/Androz2091** !`);
 });
 
 client.login(config.token);
