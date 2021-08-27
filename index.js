@@ -10,7 +10,7 @@ client.on('ready', () => {
     console.log(`Ready. Logged as ${client.user.tag}`);
 });
 
-client.on('message', async (message) => {
+client.on('messageCreate', async (message) => {
     if (message.channel.type === 'dm') return;
     if (message.author.bot) return;
 
@@ -38,13 +38,13 @@ client.on('message', async (message) => {
         /s4d|scratch/.test(message.content) && message.channel.id !== config.scratchForDiscordChannelID
     ) {
         message.channel.send(`your message seems to be related to <#${config.scratchForDiscordChannelID}>. In this case, please use this channel instead.`, {
-            referenceMessage: message,
+            messageReference: message,
         });
     } else if (
         /help|please/.test(message.content) && config.chatChannelIDs.includes(message.channel.id)
     ) {
         message.channel.send(`your message seems to be a request for help. In this case, please use <#${config.generalSupportChannelID}> instead.`, {
-            referenceMessage: message,
+            messageReference: message,
         });
     }
 });
