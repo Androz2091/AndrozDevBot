@@ -44,7 +44,7 @@ client.on('messageCreate', async (message) => {
             },
         });
     } else if (
-        /help|please/.test(message.content) && config.chatChannelIDs.includes(message.channel.id)
+        message.content.toLowercase().includes("help") || message.content.toLowercase().includes("aide") && config.chatChannelIDs.includes(message.channel.id)
     ) {
         message.channel.send({
             content: `your message seems to be a request for help. In this case, please use <#${config.generalSupportChannelID}> instead.`,
