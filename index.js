@@ -35,7 +35,7 @@ client.on('messageCreate', async (message) => {
         message.delete();
         message.channel.send({ embeds: [embed] });
     } else if (
-        /s4d|scratch/.test(message.content) && message.channel.id !== config.scratchForDiscordChannelID
+        /s4d|scratch/i.test(message.content) && message.channel.id !== config.scratchForDiscordChannelID
     ) {
         message.channel.send({
             content: `your message seems to be related to <#${config.scratchForDiscordChannelID}>. In this case, please use this channel instead.`,
@@ -44,7 +44,7 @@ client.on('messageCreate', async (message) => {
             },
         });
     } else if (
-        /help|please/.test(message.content) && config.chatChannelIDs.includes(message.channel.id)
+        /help|please/i.test(message.content) && config.chatChannelIDs.includes(message.channel.id)
     ) {
         message.channel.send({
             content: `your message seems to be a request for help. In this case, please use <#${config.generalSupportChannelID}> instead.`,
