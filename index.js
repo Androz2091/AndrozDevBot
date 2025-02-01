@@ -12,7 +12,20 @@ client.on('ready', () => {
     console.log(`Ready. Logged as ${client.user.tag}`);
 });
 
+const helpWords = [
+    "pls",
+    "plz",
+    "help",
+    "svp",
+    "aide",
+    "aidez",
+    "aidé",
+    "hlp",
+    "helppppp",
+];
+
 client.on('messageCreate', async (message) => {
+
     if (message.channel.type === 'dm') return;
     if (message.author.bot) return;
 
@@ -27,7 +40,7 @@ client.on('messageCreate', async (message) => {
         if (!clientID || !(/^([0-9]{1,32})$/.test(clientID))) return wrongFormat('client ID not found');
         const sourceCode = sourceCodeLine.slice('Source code URL:'.length, sourceCodeLine.length).trim();
         if (!sourceCode) return wrongFormat('source code not found');
-        const user = await client.users.fetch(clientID).catch(() => {});
+        const user = await client.users.fetch(clientID).catch(() => { });
         if (!user) return wrongFormat('user not found');
         const embed = new Discord.MessageEmbed()
             .setAuthor(user.tag, user.displayAvatarURL())
@@ -46,7 +59,7 @@ client.on('messageCreate', async (message) => {
             },
         });
     } else if (
-        /help|please/i.test(message.content) && process.env.CHAT_CHANNEL_IDS.split(',').includes(message.channel.id)
+        helpWords.some(word => message.content.toLowerCase().includes(word)) && process.env.CHAT_CHANNEL_IDS.split(',').includes(message.channel.id)
     ) {
         message.channel.send({
             content: `your message seems to be a request for help. In this case, please use <#${process.env.GENERAL_SUPPORT_CHANNEL_ID}> instead.`,
