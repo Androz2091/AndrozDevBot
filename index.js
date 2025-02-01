@@ -1,10 +1,12 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const Discord = require('discord.js');
 
 const client = new Discord.Client({
-    partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-    intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MEMBERS],
+    partials: [Discord.Partials.MESSAGE, Discord.Partials.CHANNEL, Discord.Partials.GUILD_MEMBER],
+    intents: [Discord.IntentsBitField.Flags.Guilds, Discord.IntentsBitField.Flags.GuildMessages, Discord.IntentsBitField.Flags.GuildMembers, Discord.IntentsBitField.Flags.MessageContent],
 });
-const config = require('./config');
 
 client.on('ready', () => {
     console.log(`Ready. Logged as ${client.user.tag}`);
@@ -14,7 +16,7 @@ client.on('messageCreate', async (message) => {
     if (message.channel.type === 'dm') return;
     if (message.author.bot) return;
 
-    if (message.channel.id === config.addBotChannel) {
+    if (message.channel.id === process.env.ADD_BOT_CHANNEL_ID) {
         const [clientIDLine, sourceCodeLine] = message.content.split('\n');
         const wrongFormat = (reason) => {
             message.delete();
@@ -35,19 +37,19 @@ client.on('messageCreate', async (message) => {
         message.delete();
         message.channel.send({ embeds: [embed] });
     } else if (
-        /s4d|scratch/i.test(message.content) && message.channel.id !== config.scratchForDiscordChannelID
+        /s4d|scratch/i.test(message.content) && message.channel.id !== process.env.S4D_CHANNEL_ID
     ) {
         message.channel.send({
-            content: `your message seems to be related to <#${config.scratchForDiscordChannelID}>. In this case, please use this channel instead.`,
+            content: `your message seems to be related to <#${process.env.S4D_CHANNEL_ID}>. In this case, please use this channel instead.`,
             reply: {
                 messageReference: message.id,
             },
         });
     } else if (
-        /help|please/i.test(message.content) && config.chatChannelIDs.includes(message.channel.id)
+        /help|please/i.test(message.content) && process.env.CHAT_CHANNEL_IDS.split(',').includes(message.channel.id)
     ) {
         message.channel.send({
-            content: `your message seems to be a request for help. In this case, please use <#${config.generalSupportChannelID}> instead.`,
+            content: `your message seems to be a request for help. In this case, please use <#${process.env.GENERAL_SUPPORT_CHANNEL_ID}> instead.`,
             reply: {
                 messageReference: message.id,
             },
@@ -59,7 +61,7 @@ client.on('guildMemberAdd', (member) => {
     if (member.user.bot) {
         member.roles.add(member.guild.roles.cache.find(((role) => role.name === 'Bots')));
 
-        const addBotChannel = client.channels.cache.get(config.addBotChannel);
+        const addBotChannel = client.channels.cache.get(process.env.ADD_BOT_CHANNEL_ID);
         addBotChannel.messages.fetch().then((messages) => {
             const addMessage = messages.some((m) => m.embeds[0]?.description.startsWith(`**ID:** ${member.user.id}`));
             if (addMessage) addMessage.delete();
@@ -67,9 +69,7 @@ client.on('guildMemberAdd', (member) => {
     } else {
         member.roles.add(member.guild.roles.cache.find((role) => role.name === 'Members'));
     }
-    const whitelisted = config.whitelistedUsers.includes(member.user.id);
-    if (whitelisted) return;
     member.guild.channels.cache.find((ch) => ch.name === 'welcome').send(`:flag_gb: Welcome, ${member}! This is the AndrozDev server. This server is dedicated to help for projects created and/or maintained by **Androz#2091**. **Github**: <https://github.com/Androz2091>!\n\n:flag_fr: Bienvenue, ${member} ! Ceci est le serveur AndrozDev. Ce serveur est dédié à l'aide pour les packages créés et projets maintenus par **Androz#2091**.\n**Github**: **https://github.com/Androz2091** !`);
 });
 
-client.login(config.token);
+client.login(process.env.DISCORD_CLIENT_TOKEN);
